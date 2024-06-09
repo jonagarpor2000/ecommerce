@@ -1,0 +1,24 @@
+{
+  "name": "clase-24-segundapracint",
+  "version": "1.0.0",
+  "description": "Segunda practica integradora",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js"
+  },
+  "keywords": [],
+  "author": "Jonathan Garcia",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.19.2",
+    "express-handlebars": "^7.1.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.1",
+    "mongoose-paginate-v2": "^1.8.2",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1"
+  }
+}
