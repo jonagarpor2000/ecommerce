@@ -1,5 +1,5 @@
 
-# Desafio de clase 21
+# Desafio de clase 24
 
 **Implementación de login**
 
@@ -7,24 +7,31 @@
 
 ## Consigna
 
-Con base en el login de nuestro entregable anterior, refactorizar para incluir los nuevos conceptos.
+Continuar sobre el proyecto que has trabajado para tu ecommerce y configurar los siguientes elementos:
 
   
 
 ## Aspectos a incluir
 
-Se deberá contar con un hasheo de contraseña utilizando bcrypt
-Se deberá contar con una implementación de passport, tanto para register como para login.
-Implementar el método de autenticación de GitHub a la vista de login.
+Crear un modelo User el cual contará con los campos:
+first_name:String,
+last_name:String,
+email:String (único)
+age:Number,
+password:String(Hash)
+cart:Id con referencia a Carts
+role:String(default:’user’)
+Desarrollar las estrategias de Passport para que funcionen con este modelo de usuarios
+Modificar el sistema de login del usuario para poder trabajar con session o con jwt (a tu elección). 
+(Sólo para jwt) desarrollar una estrategia “current” para extraer la cookie que contiene el token para obtener el usuario asociado a dicho token, en caso de tener el token, devolver al usuario asociado al token, caso contrario devolver un error de passport, utilizar un extractor de cookie.
+Agregar al router /api/sessions/ la ruta /current, la cual utilizará el modelo de sesión que estés utilizando, para poder devolver en una respuesta el usuario actual.
 
-  
 
 ## Formato
-Link al repositorio de GitHub con el proyecto solicitado.
+Link al repositorio de GitHub con el proyecto completo (No incluir node_modules).
   
 
 ##  Sugerencias
-El testeo se realizará de manera muy similar al anterior, puedes consultar el documento de testing aquí: 
-  
+Te recomendamos trabajar con el modelo de sesión con el cual te sientas más cómodo (sessions / jwt)
 
-Tu código se testeará a partir de este [ documento](https://docs.google.com/document/d/1kbJ2Jyiv-RKu179H7EoGMHAb8MeNq5wo_SyId0p2J9s/edit)
+Material complementario: [ documento](https://docs.google.com/document/d/1eJRycxOSlJNDZtTkzeNOhxG32i9ohla5WznY9ok2skw/edit?usp=drive_link)

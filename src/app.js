@@ -4,16 +4,17 @@ import __dirname from './utils.js';
 import viewsRouter from './routers/viewsRouter.js'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
-import { connectDB } from '../config/index.js'
+import {connectDB} from './config/index.js' 
 import { initializePassport } from './config/passport.config.js'
 import passport from 'passport'
-
-
+import cookieParser from 'cookie-parser'
 
 const app = express()
 const PORT = process.env.PORT || 8080
 
 app.use(express.static(__dirname+'/public'))
+app.use(cookieParser())
+app.use(passport.initialize())
 app.engine('hbs', handlebars.engine({
     extname: '.hbs'
 }))

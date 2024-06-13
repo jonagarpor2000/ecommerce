@@ -11,7 +11,7 @@ export class UsersManagerMongo {
     }
   
     async createUser(newUser) {
-      const {first_name,last_name,email,password,role} = newUser
+      const {first_name,last_name,email,age,cart,role,password,} = newUser
         return await this.userModel.create(newUser)
     }
   

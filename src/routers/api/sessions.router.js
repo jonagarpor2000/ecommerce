@@ -1,9 +1,11 @@
 // session -> login - register - logout
 import {Router} from 'express'
 import { UsersManagerMongo } from '../../dao/usrMg_db.js'
-import { auth } from '../../middlewares/auth.middleware.js'
+import {authorization} from '../../middlewares/authorization.middleware.js'
 import { createHash, isValidPassword } from '../../utils/bcrypt.js'
 import passport from 'passport'
+import { passportCall } from '../../middlewares/passportCall.middleware.js'
+import { generateToken } from '../../utils/jwt.js'
 
 
 export const sessionsRouter = Router()
@@ -26,7 +28,13 @@ sessionsRouter.post('/register', async (req, res) => {
     }
 
     const result = await userService.createUser(newUser)
-    
+    const token = generateToken({
+        email,
+        id: result._id,
+        role: result.role
+    })
+
+    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24}).send({status: 'success', message:' usuario registrado'})
     console.log(result)
     res.send('user registered')
     }catch(e){
@@ -39,15 +47,16 @@ sessionsRouter.post('/register', async (req, res) => {
 sessionsRouter.post('/login', async(req, res) => {
     const {email, password} = req.body
     const userFound = await userService.getUserBy({email})
+    if(!password || !email) return res.status(401).send({status: 'error', error: 'empty credentials'})
     if(!isValidPassword(password,{password: userFound.password})) return res.status(401).send({status: 'error', error: 'login failed'})
    
-    req.session.user = {
-        email,
-        role: userFound.role
-    }
 
-    console.log(req.session.user)
-    res.redirect('/products')
+    const token = generateToken({
+        email,
+        id: userFound._id,
+        role: userFound.role
+    })
+    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24}).redirect('/products')
 })
 
 
@@ -65,11 +74,11 @@ sessionsRouter.get('/logout', (req, res) => {
     })
 })
 
-sessionsRouter.get('/current', auth,(req, res) => {
+sessionsRouter.get('/current',passportCall('jwt'),authorization('admin'),(req, res) => {
     res.send(`Hola ${req.session.user} los datos son clasificados`)
 })
 
 
-sessionsRouter.get('/profile', auth, (req, res) => {
+sessionsRouter.get('/profile', (req, res) => {
     res.send('No esta autenticado')
 })

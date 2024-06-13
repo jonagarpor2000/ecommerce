@@ -4,13 +4,13 @@ import productsview from './products.view.router.js'
 import cartsRouter from './api/carts.router.js'
 import usersRouter from './api/users.router.js'
 import { sessionsRouter } from './api/sessions.router.js'
-import { auth } from '../middlewares/auth.middleware.js'
+import { authorization } from '../middlewares/authorization.middleware.js'
 const router = Router()
 
 
 
 router.get('/login', (req, res) => {
-    res.render('login',{auth})
+    res.render('login',{authorization})
 })
 
 router.get('/register', (req, res) => {
