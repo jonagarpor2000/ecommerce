@@ -6,6 +6,7 @@ import { createHash, isValidPassword } from '../../utils/bcrypt.js'
 import passport from 'passport'
 import { passportCall } from '../../middlewares/passportCall.middleware.js'
 import { generateToken } from '../../utils/jwt.js'
+import { authentication } from '../../config/passport.config.js'
 
 
 export const sessionsRouter = Router()
@@ -35,7 +36,6 @@ sessionsRouter.post('/register', async (req, res) => {
     })
 
     res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24}).send({status: 'success', message:' usuario registrado'})
-    console.log(result)
     res.send('user registered')
     }catch(e){
         console.log(e)
@@ -50,32 +50,46 @@ sessionsRouter.post('/login', async(req, res) => {
     if(!password || !email) return res.status(401).send({status: 'error', error: 'empty credentials'})
     if(!isValidPassword(password,{password: userFound.password})) return res.status(401).send({status: 'error', error: 'login failed'})
    
-
+    
     const token = generateToken({
         email,
         id: userFound._id,
         role: userFound.role
     })
-    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24}).redirect('/products')
+    console.log(`Tengo cosas ${userFound}`)
+    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24})
 })
 
 
-sessionsRouter.get('/github', passport.authenticate('github',{scope: 'user:email'}),async(req,res)=>{} )
-sessionsRouter.get('/githubcallback', passport.authenticate('github',{failureRedirect:'/login'}),async(req,res)=>{
-    req.session.user = req.user
+sessionsRouter.get('/github', passportCall('github',{scope: 'user:email'}),async(req,res)=>{
+    const {email,id,role} = await userService.getUserBy({email: profile._json.email})       
+        const token = generateToken({
+                    email,
+                    id,
+                    role
+                })
+                res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24})
+                
+                
+} )
+sessionsRouter.get('/githubcallback', passportCall('github',{failureRedirect:'/login'}),async(req,res)=>{
     res.redirect('/products')
 } )
 
 
 sessionsRouter.get('/logout', (req, res) => {
-    req.session.destroy( err => {
-        if(err) return res.send({status: 'error', error: err})
-        else return res.redirect('/login')
-    })
+    
+    res.cookie('token').destroy()
+    req.session.destroy
+    return res.redirect('/login')
+
 })
 
-sessionsRouter.get('/current',passportCall('jwt'),authorization('admin'),(req, res) => {
-    res.send(`Hola ${req.session.user} los datos son clasificados`)
+sessionsRouter.get('/current',await authentication,await authorization('admin'),(req, res) => {
+     for (const [key, value] of Object.entries(req.user.user)) {
+            console.log(`${key}: ${value}`);
+          }
+    res.send(`Hola ${req.user.user} los datos son clasificados`)
 })
 
 

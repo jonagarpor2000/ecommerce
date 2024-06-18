@@ -3,11 +3,11 @@ import githubStrategy from 'passport-github2'
 import {Strategy,ExtractJwt} from 'passport-jwt'
 import local from 'passport-local'
 import { UsersManagerMongo } from '../dao/usrMg_db.js'
-import { PRIVATE_KEY } from '../utils/jwt.js'
+import { PRIVATE_KEY, generateToken } from '../utils/jwt.js'
+import { passportCall } from '../middlewares/passportCall.middleware.js'
 
 
 
-const LocalStrategy = local.Strategy
 
 const JWTStrategy = Strategy
 const JWTExtract =  ExtractJwt
@@ -41,11 +41,9 @@ export const initializePassport = () =>{
         callbackURL:'http://localhost:8080/api/sessions/githubcallback'
     },async (accessToken,refreshToken,profile,done)=>{
         try {
-            console.log(profile)
             let user = await userService.getUserBy({email: profile._json.email})
             console.log(user)
             if(!user){
-                console.log('no user')
                 let newUser = {
                     first_name:profile._json.name.split(' ')[0],
                     last_name:profile._json.name.split(' ')[1],
@@ -53,7 +51,6 @@ export const initializePassport = () =>{
                     password:'',
                     role:'user'
                 }
-                console.log('hay user')
                 let result = await userService.createUser(newUser)
                 done(null,result)
             }else{
@@ -78,4 +75,4 @@ export const initializePassport = () =>{
     
 }
 
-export const auth = passport.authenticate('jwt',{session:false})
+export const authentication = passportCall('jwt',{session:false})

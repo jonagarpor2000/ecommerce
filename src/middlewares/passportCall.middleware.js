@@ -1,5 +1,5 @@
 import passport from "passport";
-import { Strategy } from "passport-jwt";
+import { generateToken } from "../utils/jwt.js";
 
 export const passportCall = strategy => {
     return async (req,res,next) => {
