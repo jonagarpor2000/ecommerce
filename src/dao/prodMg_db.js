@@ -7,17 +7,18 @@ class prodMg {
 getProducts = async (page,sort,limit,query) => {
   page = page != undefined ? page : 1;
   limit = limit != undefined ? limit : 10;
+  query = query != undefined ? {category:query} : {};
   sort = sort === "asc" ? 1 : sort === "desc" ? -1 : 0;
-  let sortsentence = {} 
+  let sortsentence 
   if (sort===0){
-    sortsentence = ""
+    sortsentence = {}
   }else{
     sortsentence = {price: sort}
   }
  
 
   try {
-    let products = await this.model.paginate({category:query},{limit:limit,page:page,sort:sortsentence,lean:true})    
+    let products = await this.model.paginate(query,{limit:limit,page:page,sort:sortsentence,lean:true})    
     products.prevLink = `/products?numPage=${products.prevPage}&limit=${products.limit}`
     products.nextLink = `/products?numPage=${products.nextPage}&limit=${products.limit}`      
     return products;

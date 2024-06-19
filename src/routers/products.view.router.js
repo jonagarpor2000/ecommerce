@@ -1,14 +1,12 @@
 import {Router, query} from 'express'
+import { prodMg } from '../dao/prodMg_db.js'
 
 const router = Router()
-
+const product = new prodMg()
 router.get('/',async(req,res)=>{
     let {numPage,limit,query,sort} = req.query
-    console.log(`Tengo pag: ${numPage} y ${limit}`)
     try {
-        let prods = await fetch(`http://localhost:8080/api/products?numPage=${numPage}&limit=${limit}`)
-        .then(response => response.json())
-        .then(data => {return data.payload})
+        const prods = await product.getProducts(numPage,sort,limit,query)
         console.log(prods)
         res.render('products',{
             products: prods

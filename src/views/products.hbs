@@ -1,16 +1,17 @@
-<a href="/api/sessions/logout" class="btn btn-outline-danger">Logout</a>
+<a href="/api/sessions/logout" class="btn btn-otline-danger"></a>
 <h1>Welcome to Product List</h1>
-<div>
+<div data-name="container" id="dvd">
 {{#each products.docs}}
-<p> Titulo: {{products.title}}</p>
-<p> Descripcion: {{this.description}}</p>
+<p hidden="true" data-name="pid"> {{_id}}</p>
+<p> Titulo: {{title}}</p>
+<p> Descripcion: {{description}}</p>
 <p> Precio: {{price}}</p>
 <p> Estado: {{status}}</p>
 <p> Categoria: {{category}}</p>
 <p> Thumbnail: {{thumbnail}}</p>
 <p> Codigo de producto: {{code}}</p>
 <p> Stock: {{stock}}</p>
-<button>Agregar al carrito</button>
+<button data-name="save" id="save_cart">Agregar al carrito</button>
 <hr></hr>
 {{/each}}
 
@@ -21,5 +22,36 @@
 {{#if products.hasNextPage}}
     <a href="{{products.nextLink}}">Siguiente</a>
 {{/if}}
+<script>
+       const btnAddToCart = document.querySelector("#save_cart")
+   const divcontainer = document.querySelector("#dvd")
+btnAddToCart.addEventListener('click', async function(event){
+    event.preventDefault()
+    const pid = dvd.dataset.name.pid
+    console.log(`Tengo mi pid: ${pid}`)
+    try {
+        const response = await fetch('/api/carts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({pid }), // Send cid and pid in the request body
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+          // Handle successful cart addition (e.g., update cart UI, show a success message)
+          alert('Product added to cart!');
+        } else {
+          // Handle error (e.g., display an error message)
+          console.log('Failed to add product to cart:', data.error);
+        }
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
+    
+})
+    
+</script>
 </div>
 
