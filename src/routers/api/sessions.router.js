@@ -1,25 +1,26 @@
 // session -> login - register - logout
 import {Router} from 'express'
+import { UsersManagerMongo } from '../../dao/usrMg_db.js'
 import {authorization} from '../../middlewares/authorization.middleware.js'
 import { createHash, isValidPassword } from '../../utils/bcrypt.js'
+import passport from 'passport'
 import { passportCall } from '../../middlewares/passportCall.middleware.js'
 import { generateToken } from '../../utils/jwt.js'
 import { authentication } from '../../config/passport.config.js'
-import { UsersManagerMongo } from '../../dao/usrDao.js'
 
 
 export const sessionsRouter = Router()
 
-const userService = new UsersManagerMongo()
+const userService = new UsersManagerMongo
 
 sessionsRouter.post('/register', async (req, res) => {
     const {first_name, last_name, email,password} = req.body
     try{
-    if(!email ||!password) return res.json({status: 'error', error: 'se deben completar campos pendientes'})
+    if(!email ||!password) return res.status(401).send({status: 'error', error: 'se deben completar campos pendientes'})
 
 
     const userExist = await userService.getUserBy({email})
-    if(userExist) return res.json({status: 'error', error: 'usuario ya existente'})
+    if(userExist) return res.status(401).send({status: 'error', error: 'usuario ya existente'})
    const newUser = {
         first_name,
         last_name,
@@ -34,10 +35,11 @@ sessionsRouter.post('/register', async (req, res) => {
         role: result.role
     })
 
-    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24}).json({status: 'success', message:' usuario registrado'})
+    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24}).send({status: 'success', message:' usuario registrado'})
+    res.send('user registered')
     }catch(e){
         console.log(e)
-        res.json({status: 'error', error: 'error al registrar usuario'})
+        res.status(401).send({status: 'error', error: 'error al registrar usuario'})
     }
 })
 
@@ -54,7 +56,8 @@ sessionsRouter.post('/login', async(req, res) => {
         id: userFound._id,
         role: userFound.role
     })
-    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24}).redirect('/products')
+    console.log(`Tengo cosas ${userFound}`)
+    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24})
 })
 
 
@@ -76,7 +79,9 @@ sessionsRouter.get('/githubcallback', passportCall('github',{failureRedirect:'/l
 
 sessionsRouter.get('/logout', (req, res) => {
     
-    res.clearCookie('token').redirect('/login')
+    res.cookie('token').destroy()
+    req.session.destroy
+    return res.redirect('/login')
 
 })
 

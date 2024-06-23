@@ -1,9 +1,8 @@
 import {Router} from 'express'
-import { cartMg } from '../dao/cartdao.js'
-
+import { CartMgDb } from '../../dao/cartMg_db.js'
 const router = Router()
 
-const CartService = new cartMg()
+const CartService = new CartMgDb()
 router.get('/',async(req,res)=>{
     const carts = await CartService.getCarts()
     res.send({status:"success",payload:carts})

@@ -1,5 +1,5 @@
 import { cartModel } from "./models/carts.models.js";
-class cartMg {
+class CartMgDb {
     constructor() {
         this.model = cartModel
     }
@@ -91,4 +91,4 @@ class cartMg {
     }
 }
 
-export {cartMg}
+export {CartMgDb}
