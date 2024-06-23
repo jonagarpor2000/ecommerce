@@ -1,5 +1,6 @@
 import {Router, query} from 'express'
-import { prodMg } from '../dao/prodMg_db.js'
+import { prodMg } from '../dao/prodDao.js'
+
 
 const router = Router()
 const product = new prodMg()
