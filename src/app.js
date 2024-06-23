@@ -1,16 +1,17 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
 import __dirname from './utils.js';
+import viewsRouter from './routers/viewsRouter.js'
 import session from 'express-session'
-import indexRouter from './routers/index.js'
 import MongoStore from 'connect-mongo'
-import {connectDB, objConfig} from './config/index.js' 
+import {connectDB} from './config/index.js' 
 import { initializePassport } from './config/passport.config.js'
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
 
-const{port,mongoUrl,jwtPrivateKey} = objConfig
 const app = express()
+const PORT = process.env.PORT || 8080
+
 app.use(express.static(__dirname+'/public'))
 app.use(cookieParser())
 app.use(passport.initialize())
@@ -19,14 +20,14 @@ app.engine('hbs', handlebars.engine({
 }))
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: mongoUrl,
+        mongoUrl: 'mongodb+srv://coder:coder.2024@cluster0.yyfgeas.mongodb.net/ecommerce',
     mongoOptions:{
         useNewUrlParser: true,
         useUnifiedTopology: true,
     },        
     ttl:60*60*1000*24
     }),
-    secret: jwtPrivateKey,
+    secret: 's3cr3tC@d3r',
     resave: true,
     saveUninitialized: true,
     
@@ -40,11 +41,11 @@ app.set('views',__dirname+'/views')
 app.set('view engine','hbs')
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.use(indexRouter)
+app.use('/', viewsRouter)
 connectDB()
 
-app.listen(port,'127.0.0.1', error => {
+app.listen(PORT, error => {
     if(error) console.log(`Error: ${error}`)
-    console.log(`Server escuchando en el puerto ${port}`)
+    console.log(`Server escuchando en el puerto ${PORT}`)
 
 })
