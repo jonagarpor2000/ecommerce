@@ -1,5 +1,6 @@
 import {Router, query} from 'express'
-import { prodMg } from '../../dao/prodMg_db.js'
+import { prodMg } from '../../dao/prodDao.js'
+
 
 const router = Router()
 
@@ -21,9 +22,9 @@ router.post('/',async (req,res)=>{
     const {body} = req
     const result = await prodService.addProduct(body)
     if(result.status='error'){
-        res.send(result)
+        res.json(result)
     }else{
-        res.send({status:'Success',payload:result})
+        res.json({status:'Success',payload:result})
     }
 })
 router.put('/:pid',async(req,res)=>{
@@ -31,21 +32,16 @@ router.put('/:pid',async(req,res)=>{
     const {body} = req
     const result = await prodService.updateProduct(pid,body)
     if(result.status='error'){
-        res.send(result)
+        res.json(result)
     }else{
-        res.send({status:'Success',payload:result})
+        res.json({status:'Success',payload:result})
     }
 })
 router.delete('/:pid', async(req,res)=>{
     const {pid} = req.params
     await prodService.deleteProduct(pid)
-    res.send('delete de productos')
-})
-/*router.get('/:uid',async(req,res)=>{
-    res.send('get de productos')
+    res.json({status:'Success',payload:result})
 })
 
-
-*/
 
 export default router

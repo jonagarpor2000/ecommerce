@@ -1,10 +1,9 @@
 import passport from 'passport'
 import githubStrategy from 'passport-github2'
 import {Strategy,ExtractJwt} from 'passport-jwt'
-import local from 'passport-local'
-import { UsersManagerMongo } from '../dao/usrMg_db.js'
 import { PRIVATE_KEY, generateToken } from '../utils/jwt.js'
 import { passportCall } from '../middlewares/passportCall.middleware.js'
+import { userService} from '../service/index.js'
 
 
 
@@ -20,7 +19,7 @@ const cookieExtractor = (req) => {
     return token
 }
 
-const userService = new UsersManagerMongo()
+const usrService = userService
 
 export const initializePassport = () =>{
 
@@ -41,7 +40,7 @@ export const initializePassport = () =>{
         callbackURL:'http://localhost:8080/api/sessions/githubcallback'
     },async (accessToken,refreshToken,profile,done)=>{
         try {
-            let user = await userService.getUserBy({email: profile._json.email})
+            let user = await usrService.getUserBy({email: profile._json.email})
             console.log(user)
             if(!user){
                 let newUser = {
@@ -51,7 +50,7 @@ export const initializePassport = () =>{
                     password:'',
                     role:'user'
                 }
-                let result = await userService.createUser(newUser)
+                let result = await usrService.createUser(newUser)
                 done(null,result)
             }else{
                 done(null,user)
@@ -66,7 +65,7 @@ export const initializePassport = () =>{
     })
     passport.deserializeUser(async(id, done)=>{
         try {
-            const user = await userService.getUserBy({_id:id})
+            const user = await usrService.getUserBy({_id:id})
             done(null,user)
         } catch (error) {
             done(error)
