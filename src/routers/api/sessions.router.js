@@ -5,7 +5,7 @@ import { createHash, isValidPassword } from '../../utils/bcrypt.js'
 import { passportCall } from '../../middlewares/passportCall.middleware.js'
 import { generateToken } from '../../utils/jwt.js'
 import { authentication } from '../../config/passport.config.js'
-import { UsersManagerMongo } from '../../dao/usrDao.js'
+import { UsersManagerMongo } from '../../dao/mongo/usrDao.js'
 
 
 export const sessionsRouter = Router()

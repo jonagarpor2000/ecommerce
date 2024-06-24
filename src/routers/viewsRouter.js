@@ -1,6 +1,6 @@
 import { Router, json } from 'express'
-import cartsview from './carts.view.router.js'
-import productsview from './products.view.router.js'
+import cartsview from './views/carts.view.router.js'
+import productsview from './views/products.view.router.js'
 import { authorization } from '../middlewares/authorization.middleware.js'
 const router = Router()
 

@@ -1,4 +1,4 @@
-import { userModel } from './models/users.models.js';
+import { userModel } from '../models/users.models.js';
 export class UsersManagerMongo {
     constructor() {
       this.userModel = userModel;

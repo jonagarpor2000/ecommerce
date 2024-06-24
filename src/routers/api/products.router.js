@@ -1,47 +1,12 @@
 import {Router, query} from 'express'
-import { prodMg } from '../../dao/prodDao.js'
+import { productController } from '../../controllers/product.controller.js'
 
 
 const router = Router()
-
-const prodService = new prodMg()
-router.get('/',async(req,res)=>{
-    let {numPage,limit,query,sort} = req.query
-    let prods = await prodService.getProducts(numPage,sort,limit,query)
-    let jsonresponse = {status:"success",payload: prods} 
-    res.send(jsonresponse)
-})
-router.get('/:pid',async(req,res)=>{
-    const {pid} = req.params
-    let prod = await prodService.getProductById(pid)
-    res.send({status:"success",payload: prod})
-})
-
-
-router.post('/',async (req,res)=>{
-    const {body} = req
-    const result = await prodService.addProduct(body)
-    if(result.status='error'){
-        res.json(result)
-    }else{
-        res.json({status:'Success',payload:result})
-    }
-})
-router.put('/:pid',async(req,res)=>{
-    const {pid} = req.params
-    const {body} = req
-    const result = await prodService.updateProduct(pid,body)
-    if(result.status='error'){
-        res.json(result)
-    }else{
-        res.json({status:'Success',payload:result})
-    }
-})
-router.delete('/:pid', async(req,res)=>{
-    const {pid} = req.params
-    await prodService.deleteProduct(pid)
-    res.json({status:'Success',payload:result})
-})
-
-
+const {getProducts,getProductById,addProduct,deleteProduct,updateProduct} = new productController()
+router.get('/',getProducts)
+router.get('/:pid',getProductById)
+router.post('/',addProduct)
+router.put('/:pid',updateProduct)
+router.delete('/:pid', deleteProduct)
 export default router

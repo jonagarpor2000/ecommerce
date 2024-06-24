@@ -1,5 +1,5 @@
 import {Router, query} from 'express'
-import { prodMg } from '../dao/prodDao.js'
+import { prodMg } from '../../dao/mongo/prodDao.js'
 
 
 const router = Router()
@@ -8,7 +8,6 @@ router.get('/',async(req,res)=>{
     let {numPage,limit,query,sort} = req.query
     try {
         const prods = await product.getProducts(numPage,sort,limit,query)
-        console.log(prods)
         res.render('products',{
             products: prods
         })
