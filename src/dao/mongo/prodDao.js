@@ -1,13 +1,11 @@
 import { json } from "express";
-import { productModel } from "../models/products.models.js";
-import { paginate } from "mongoose-paginate-v2";
+import { productModel } from "./models/products.models.js";
 class prodMg {
   constructor() {
       this.model = productModel
   }
     getProducts = async (page,sort,limit,query) => {
-      console.log(`Soy ${page} con orden ${sort} limitado por ${limit} y consulta ${query}`)
-      this.model.paginate(query,{limit,page,'sort':sort,lean:true})
+      return await this.model.paginate(query,{limit,page,'sort':sort,lean:true})
     };
 
   getProductById = async(id) => {

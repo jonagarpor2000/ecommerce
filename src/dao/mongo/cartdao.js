@@ -1,4 +1,4 @@
-import { cartModel } from "../models/carts.models.js";
+import { cartModel } from "./models/carts.models.js";
 class cartMg {
     constructor() {
         this.model = cartModel

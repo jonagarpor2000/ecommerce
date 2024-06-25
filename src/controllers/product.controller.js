@@ -1,5 +1,6 @@
 import { productService } from "../service/index.js";
 
+
 export class productController {
     constructor() {
         this.prodService = productService
@@ -16,8 +17,6 @@ export class productController {
         }else{
             sortsentence = {price: sort}
         }
-        console.log(`Soy desde controller ${page} con orden ${sort} limitado por ${limit} y consulta ${query}`)
-
         try {
             let products = await this.prodService.getProducts(page,sortsentence,limit,query)  
             products.prevLink = `/products?numPage=${products.prevPage}&limit=${products.limit}`
@@ -67,6 +66,8 @@ export class productController {
                 console.error(err);
                 return res.json( {status:'error',payload:'Error updating product' })
             }
-        }  
+        }
+        
+        
 }
 
