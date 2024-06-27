@@ -1,19 +1,24 @@
 import {Router} from 'express'
-import { cartMg } from '../../dao/mongo/cartdao.js'
 
 const router = Router()
 
-const CartService = new cartMg()
 router.get('/',async(req,res)=>{
-    const carts = await CartService.getCarts()
-    res.send({status:"success",payload:carts})
+    const {cid} = req.params
+    let result = await fetch(`http://127.0.0.1:8080/api/carts`) // Esto retorna HTML/ Tal vel usar header
+        .then(response => response.json())
+        .then(data => {return data})
+        res.render('carts',{
+            cart: result.payload.products
+        })
 })
 router.get('/:cid',async(req,res)=>{
     const {cid} = req.params
-    let result = await CartService.getCartById(cid)
-    console.log(result)
+    let result = await fetch(`http://127.0.0.1:8080/api/carts/${cid}`) // Esto retorna HTML/ Tal vel usar header
+        .then(response => response.json())
+        .then(data => {return data})
+        console.log(result)
     res.render('carts',{
-        cart: result
+        cart: result.payload
     })
 })
 

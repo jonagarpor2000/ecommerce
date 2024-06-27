@@ -1,16 +1,23 @@
 import {Router, query} from 'express'
-import { prodMg } from '../../dao/mongo/prodDao.js'
 
 
 const router = Router()
-const product = new prodMg()
 router.get('/',async(req,res)=>{
-    let {numPage,limit,query,sort} = req.query
+    let {page,limit,query,sort} = req.query
+        page = page != undefined ? page : 1;
+        limit = limit != undefined ? limit : 10;
+        query = query != undefined ? {category:query} : {};
+        sort = sort === "asc" ? 1 : sort === "desc" ? -1 : 0;
     try {
-        const prods = await product.getProducts(numPage,sort,limit,query)
+        //`http://localhost:8080/api/products/page=${page}&limit=${limit}&query=${query}&sort=${sort}
+        let prods = await fetch(`http://127.0.0.1:8080/api/products?page=${page}&limit=${limit}`) // Esto retorna HTML/ Tal vel usar header
+        .then(response => response.json())
+        .then(data => {return data})
+        console.log(prods)
         res.render('products',{
-            products: prods
+            products: prods.payload
         })
+
         
     } catch (error) {
         console.log(error.message)

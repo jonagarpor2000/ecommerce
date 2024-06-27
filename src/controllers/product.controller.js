@@ -19,8 +19,8 @@ export class productController {
         }
         try {
             let products = await this.prodService.getProducts(page,sortsentence,limit,query)  
-            products.prevLink = `/products?numPage=${products.prevPage}&limit=${products.limit}`
-            products.nextLink = `/products?numPage=${products.nextPage}&limit=${products.limit}`      
+            products.prevLink = `/products?page=${products.prevPage}&limit=${products.limit}`
+            products.nextLink = `/products?page=${products.nextPage}&limit=${products.limit}`      
             return res.json({status:'success',payload:products})
         } catch (error) {
             return res.json({status:'error',payload:error})
