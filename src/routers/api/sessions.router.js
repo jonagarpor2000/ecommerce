@@ -5,12 +5,13 @@ import { createHash, isValidPassword } from '../../utils/bcrypt.js'
 import { passportCall } from '../../middlewares/passportCall.middleware.js'
 import { generateToken } from '../../utils/jwt.js'
 import { authentication } from '../../config/passport.config.js'
-import { UsersManagerMongo } from '../../dao/mongo/usrDao.js'
+import { userService } from '../../service/index.js'
+
 
 
 export const sessionsRouter = Router()
 
-const userService = new UsersManagerMongo()
+const usrService = userService
 
 sessionsRouter.post('/register', async (req, res) => {
     const {first_name, last_name, email,password} = req.body
@@ -18,7 +19,7 @@ sessionsRouter.post('/register', async (req, res) => {
     if(!email ||!password) return res.json({status: 'error', error: 'se deben completar campos pendientes'})
 
 
-    const userExist = await userService.getUserBy({email})
+    const userExist = await usrService.getUserBy({email})
     if(userExist) return res.json({status: 'error', error: 'usuario ya existente'})
    const newUser = {
         first_name,
@@ -27,7 +28,7 @@ sessionsRouter.post('/register', async (req, res) => {
         password: await createHash(password),
     }
 
-    const result = await userService.createUser(newUser)
+    const result = await usrService.create(newUser)
     const token = generateToken({
         email,
         id: result._id,
@@ -44,7 +45,7 @@ sessionsRouter.post('/register', async (req, res) => {
 
 sessionsRouter.post('/login', async(req, res) => {
     const {email, password} = req.body
-    const userFound = await userService.getUserBy({email})
+    const userFound = await usrService.getBy({email})
     if(!password || !email) return res.status(401).send({status: 'error', error: 'empty credentials'})
     if(!isValidPassword(password,{password: userFound.password})) return res.status(401).send({status: 'error', error: 'login failed'})
    
@@ -59,7 +60,7 @@ sessionsRouter.post('/login', async(req, res) => {
 
 
 sessionsRouter.get('/github', passportCall('github',{scope: 'user:email'}),async(req,res)=>{
-    const {email,id,role} = await userService.getUserBy({email: profile._json.email})       
+    const {email,id,role} = await usrService.getBy({email: profile._json.email})       
         const token = generateToken({
                     email,
                     id,

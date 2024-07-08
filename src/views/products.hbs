@@ -28,7 +28,7 @@
 btnAddToCart.addEventListener('click', async function(event){
     event.preventDefault()
     const pid = dvd.dataset.name.pid
-    console.log(`Tengo mi pid: ${pid}`)
+    console.log(`Tengo mi pid: ${pid}`)//Pending
     try {
         const response = await fetch('/api/carts', {
           method: 'POST',

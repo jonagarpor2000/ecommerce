@@ -19,7 +19,8 @@ dotenv.config({
 export const objConfig = {
     port: process.env.PORT || 8080,
     mongoUrl: process.env.MONGO_URL,
-    jwtPrivateKey: process.env.JWT_PRIVATE_KEY 
+    jwtPrivateKey: process.env.JWT_PRIVATE_KEY,
+    persistence:process.env.PERSISTENCE
 }
     
 export const connectDB = () => {

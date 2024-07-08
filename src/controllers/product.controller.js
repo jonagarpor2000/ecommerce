@@ -3,9 +3,9 @@ import { productService } from "../service/index.js";
 
 export class productController {
     constructor() {
-        this.prodService = productService
+        this.service = productService
     }
-        getProducts = async (req,res) => {
+        getAll = async (req,res) => {
         let {page,limit,query,sort} = req.query
         page = page != undefined ? page : 1;
         limit = limit != undefined ? limit : 10;
@@ -18,7 +18,7 @@ export class productController {
             sortsentence = {price: sort}
         }
         try {
-            let products = await this.prodService.getProducts(page,sortsentence,limit,query)  
+            let products = await this.service.getAll(page,sortsentence,limit,query)  
             products.prevLink = `/products?page=${products.prevPage}&limit=${products.limit}`
             products.nextLink = `/products?page=${products.nextPage}&limit=${products.limit}`      
             return res.json({status:'success',payload:products})
@@ -26,38 +26,47 @@ export class productController {
             return res.json({status:'error',payload:error})
         }
     }  
-        getProductById = async(id) => {
-            return await this.prodService.getProductById(id)
+        getById = async (req,res) => {
+            const {pid} = req.params
+            try {
+                let product = await this.service.getById(pid)
+                return res.json({status:'success',payload:product})
+            } catch (error) {
+                return res.json({status:'error',payload:error})
+            }
+
         }
   
-        addProduct = async(product) =>{
-            const {title,description,price,status,thumbnail,code,stock} = product
+        add = async (req,res) => {
+            const {title,description,price,status,thumbnail,code,stock} = req.body
+            let product = {title,description,price,status,thumbnail,code,stock}
             if(!title || !description || !price || !status || !thumbnail || !code || !stock){
                 return res.json({status:'error',payload:'Error: campos incompletos'})
             }else{
                 try {
-                    let addedprod = await this.prodService.addProduct(product)
+                    let addedprod = await this.service.add(product)
                     return res.json({status:'success',payload:addedprod})
                     
                 } catch (error) {
-                    return res.json({status:'error',payload:error})
+                    return res.json({status:'error',payload:error.message})
                 }
             }
             
             
         }
 
-        deleteProduct = async (id)=>{
-            const del_prod = await this.prodService.deleteProduct(id)
+        deleteprod = async (req,res) => {
+            const {id} = req.params
+            const del_prod = await this.service.delete(id)
             if(!del_prod){
                 res.json({status:'error',payload:'Product not found'})
             }
             return res.json({status:'success',payload:del_prod})
         }
 
-        updateProduct = async (id,prod)=>{
+        update = async (id,prod)=>{
             try {
-                const updatedProduct = this.prodService.updateProduct(id,prod)
+                const updatedProduct = this.service.updateProduct(id,prod)
             if (!updatedProduct) {
                 return res.json({ status:'error',payload:'Product not found' })
             }

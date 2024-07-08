@@ -1,13 +1,13 @@
 import { cartModel } from "./models/carts.models.js";
-class cartMg {
+export default class cartMgMongo {
     constructor() {
         this.model = cartModel
     }
-    getCarts = async () => {
+    getAll = async () => {
         return await this.model.find({})
     }
 
-    updateCart = async (cid,pid) => {
+    update = async (cid,pid) => {
         return await this.model.findOneAndUpdate(
             {_id:cid, 'products.product': pid},
         {$inc:{'products.$.quantity':1}},
@@ -22,10 +22,10 @@ class cartMg {
             )
     }
 
-    getCartById = async (cid) => {
+    getById = async (cid) => {
             return await this.model.findOne({_id:cid})
     }
-    createCart = async () => await this.model.create({products: []})
+    create = async () => await this.model.create({products: []})
 
     addProductToCart = async (cid, pid,quantity) => {
             return await this.model.findByIdAndUpdate({_id:cid},
@@ -35,7 +35,7 @@ class cartMg {
     }
 
     deleteProductOnCart = async (cid, pid) => {
-        let cart = await this.getCartById(cid)
+        let cart = await this.getById(cid)
         if(!cart){     
             return Error(`The cart doesn't exists`)
         }else{
@@ -49,13 +49,20 @@ class cartMg {
         }
 
     }
-    emptyCart = async (cid) => {
+    empty = async (cid) => {
             return await this.model.findOneAndUpdate(
               { _id: cid },
               { $set: { products:[]} },
               { new: true }
             );
     }
-}
+    buy = async (cid) => {//Pending
+            return await this.model.findOneAndUpdate(
+              { _id: cid },
+              { $set: { products:[]} },
+              { new: true }
+            );
+    }
 
-export {cartMg}
+
+}
