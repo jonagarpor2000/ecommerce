@@ -25,6 +25,7 @@ export default class cartMgMongo {
     getById = async (cid) => {
             return await this.model.findOne({_id:cid})
     }
+
     create = async () => await this.model.create({products: []})
 
     addProductToCart = async (cid, pid,quantity) => {
@@ -56,13 +57,16 @@ export default class cartMgMongo {
               { new: true }
             );
     }
-    buy = async (cid) => {//Pending
-            return await this.model.findOneAndUpdate(
-              { _id: cid },
-              { $set: { products:[]} },
-              { new: true }
-            );
+
+
+    updateProducts = async (cid,products) => {//pending
+        return await this.model.findByIdAndUpdate(
+            { _id: cid },
+            { $pull: { products: { _id: products } } },
+            { new: true }
+          );
     }
+
 
 
 }

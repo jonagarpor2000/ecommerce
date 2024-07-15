@@ -3,16 +3,20 @@ import { Schema, model }  from "mongoose"
 const ticketCollection = 'tickets'
 
 const ticketSchema = new Schema({
-    code:Number(Math.random()),
+    code: String,
     purchase_datetime: {
         type: Date,
         index: true
     },
     amount: Number,
     purchaser:{
-        type: Schema.Types.String,
+        type: String,
         ref: "user",
-      }, 
+      },
+      products:[{
+        type: Schema.Types.ObjectId,
+        ref: "products",
+      }],
 })
 
 export const ticketModel = model(ticketCollection, ticketSchema)

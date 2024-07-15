@@ -13,6 +13,7 @@ export default class productRepository {
         
     }
     update = async (uid,userToUpdate) => await this.dao.update(uid,userToUpdate)
+    updateStock = async (pid,newStock) => await this.dao.updateStock(pid,newStock)
     delete = async (uid) => await this.dao.delete(uid)
         
 }

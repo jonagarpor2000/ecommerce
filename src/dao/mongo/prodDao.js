@@ -28,5 +28,12 @@ export default class prodMgMongo {
         { new: true }
       );
   }
+  updateStock = async (id,newStock)=>{
+    return await this.model.findOneAndUpdate(
+        { _id: id },
+        { $set: { stock:newStock } },
+        { new: true }
+      );
+  }
 
 }

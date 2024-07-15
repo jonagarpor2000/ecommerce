@@ -76,6 +76,8 @@ export class productController {
                 return res.json( {status:'error',payload:'Error updating product' })
             }
         }
+
+
         
         
 }
