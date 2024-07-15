@@ -13,18 +13,11 @@ export class cartController {
             return res.json({status:'error',payload:error})
         }
     }
-    buy = async (req,res) => {//Pending
-        try {
-            let carts = await this.cartService.buy()
-            return res.json({status:'success',payload:carts})
-        } catch (error) {
-            return res.json({status:'error',payload:error})
-        }
-    }
+    
     getByid = async (req,res) => {
         const {cid} = req.params
         try {
-            let cart = await this.cartService.getCartById(cid)
+            let cart = await this.cartService.getById(cid)
             return res.json({status:'success',payload:cart})
         } catch (error) {
             return res.json({status:'error',payload:error})

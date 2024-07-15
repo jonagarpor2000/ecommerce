@@ -11,6 +11,10 @@ export default class prodMgMongo {
   getById = async(id) => {
     return await this.model.findById(id);
   }
+
+  getStock = async(pid) => {
+    return await this.model.findById(pid).select('stock');
+  }
   
    add = async(product) =>{
     return await this.model.create(product)
@@ -35,5 +39,8 @@ export default class prodMgMongo {
         { new: true }
       );
   }
+
+
+  
 
 }

@@ -1,16 +1,17 @@
 
-import { cartService, productService } from "../service/index.js"
+import { cartService, productService, ticketService } from "../service/index.js"
 
 export default class ticketController {
     ticketPost = async (req,res) =>{
         const {cid} = req.params
-        const cart = await cartService.getBy({id:cid})
+        const cart = await cartService.getById(cid)
     
         if(!cart){
             return res.status(401).json({status:'error',payload:'Cart not found'})
         }
         const productNotPurchased = []
-        for(item of cart.products){
+  
+        for(let item of cart.products){
             const product = item.product
             const quantity = item.quantity
             const stock = await productService.getStock(product._id)
@@ -23,13 +24,17 @@ export default class ticketController {
 
         }
 
+         
+
+        let products = cart.products.map(item => item.product.map(el => el.price))
+        let quantity = cart.products.map(item => item.quantity)
+        let Totalamount = products.map((element1, index) => element1 * quantity[index]);
+        Totalamount = Totalamount.reduce((a, b) => a + (b || 0), 0)
         const ticket = await ticketService.createTicket({
             products: cart.products,
             purchaser: req.user,
-            amount: products.stock.reduce((a, b) => a + b, 0)
+            amount: Totalamount
         })
-
-        console.log(`Monto de factura total: ${ticket.amount}`)
 
         if(productNotPurchased.length> 0){
             await cartService.updateProducts(cid,cart.products.filter(item=>!productNotPurchased.includes(item.product._id)))

@@ -35,7 +35,7 @@ sessionsRouter.post('/register', async (req, res) => {
         role: result.role
     })
 
-    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24}).json({status: 'success', message:' usuario registrado'})
+    res.cookie('token', token, {httpOnly: true, maxAge: 60*60*24}).json({status: 'success', message:' usuario registrado'})
     }catch(e){
         console.log(e)
         res.json({status: 'error', error: 'error al registrar usuario'})
