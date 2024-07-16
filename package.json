@@ -30,6 +30,7 @@
     "passport-github2": "^0.1.12",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "twilio": "^5.2.2"
+    "twilio": "^5.2.2",
+    "winston": "^3.13.1"
   }
 }

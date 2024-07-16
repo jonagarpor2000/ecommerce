@@ -55,7 +55,7 @@ sessionsRouter.post('/login', async(req, res) => {
         id: userFound._id,
         role: userFound.role
     })
-    res.cookie('token', token, {httpOnly: true, maxAge: 1000*60*60*24}).redirect('/products')
+    res.cookie('token', token, {httpOnly: true, maxAge: 60*60*24}).redirect('/products')
 })
 
 

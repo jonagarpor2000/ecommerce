@@ -17,9 +17,8 @@ router.use('/users',usersRouter)
 router.use('/sessions',sessionsRouter)
 router.get('/mockingproducts',async (req,res) => {
     //const child = fork('./src/utils/generateProductsMock.js')
-    let quantity = 10
     let prods = []
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
         prods.push(products())
     }
 

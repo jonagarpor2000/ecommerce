@@ -1,4 +1,7 @@
 import { productService } from "../service/index.js";
+import { EError } from "../utils/errors/enums.js";
+import { CustomError } from "../utils/errors/error.js";
+import { generateProductError } from "../utils/errors/info.js";
 
 
 export class productController {
@@ -38,18 +41,22 @@ export class productController {
         }
   
         add = async (req,res) => {
-            const {title,description,price,status,thumbnail,code,stock} = req.body
-            let product = {title,description,price,status,thumbnail,code,stock}
-            if(!title || !description || !price || !status || !thumbnail || !code || !stock){
-                return res.json({status:'error',payload:'Error: campos incompletos'})
-            }else{
-                try {
-                    let addedprod = await this.service.add(product)
-                    return res.json({status:'success',payload:addedprod})
-                    
-                } catch (error) {
-                    return res.json({status:'error',payload:error.message})
+            try {
+                const {title,description,price,status,thumbnail,code,stock} = req.body
+                if(!title || !price){
+                    CustomError.createError({
+                        name:'Error al crear producto',
+                        cause: generateProductError({title,description,price,status,thumbnail,code,stock}),
+                        message:'Error al crear producto por campos invalidos o faltantes',
+                        code: EError.INVALID_TYPES_ERROR,
+                        
+                     })   
                 }
+                let product = {title,description,price,status,thumbnail,code,stock}
+                        let addedprod = await this.service.add(product)
+                        return res.json({status:'success',payload:addedprod})
+                }catch (error) {
+                console.log(error)
             }
             
             

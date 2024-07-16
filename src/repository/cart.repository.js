@@ -12,7 +12,9 @@ export default class CartRepository {
         await this.dao.addproduct(newproduct)
         
     }
-    updateUser = async (uid,userToUpdate) => await this.dao.update(uid,userToUpdate)
-    deleteUser = async (uid) => await this.dao.delete(uid)
+
+    updateProducts = async id => await this.dao.updateProducts(cid,products)
+    
+    
         
 }

@@ -59,10 +59,10 @@ export default class cartMgMongo {
     }
 
 
-    updateProducts = async (cid,products) => {//pending
+    updateProducts = async (cid,products) => {
         return await this.model.findByIdAndUpdate(
             { _id: cid },
-            { $pull: { products: { _id: products } } },
+            { $set: { products: { _id: products } } },
             { new: true }
           );
     }
