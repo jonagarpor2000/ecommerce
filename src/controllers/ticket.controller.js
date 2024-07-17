@@ -37,7 +37,7 @@ export default class ticketController {
         })
 
         if(productNotPurchased.length> 0){
-            await cartService.updateProducts(cid,cart.products.filter(item=>!productNotPurchased.includes(item.product._id)))
+            await cartService.deleteProductOnCart(cid,cart.products.filter(item=>!productNotPurchased.includes(cart._id,item.product._id)))
         }else{
             await cartService.empty(cid)
         }

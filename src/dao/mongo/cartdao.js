@@ -36,19 +36,11 @@ export default class cartMgMongo {
     }
 
     deleteProductOnCart = async (cid, pid) => {
-        let cart = await this.getById(cid)
-        if(!cart){     
-            return Error(`The cart doesn't exists`)
-        }else{
-            console.log(`Carrito: ${cid} y producto: ${pid}`)
-            let result = await this.model.findOneAndUpdate(
+            return await this.model.findOneAndUpdate(
                 { _id: cid },
                 { $pull: { products: { _id: pid  } } },
                 { new: true }
               );
-            return result
-        }
-
     }
     empty = async (cid) => {
             return await this.model.findOneAndUpdate(
@@ -56,15 +48,6 @@ export default class cartMgMongo {
               { $set: { products:[]} },
               { new: true }
             );
-    }
-
-
-    updateProducts = async (cid,products) => {
-        return await this.model.findByIdAndUpdate(
-            { _id: cid },
-            { $set: { products: { _id: products } } },
-            { new: true }
-          );
     }
 
 
