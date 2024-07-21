@@ -8,11 +8,13 @@ import {connectDB, objConfig} from './config/index.js'
 import { initializePassport } from './config/passport.config.js'
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
+import { addLogger } from './utils/logger.js';
 
 const{port,mongoUrl,jwtPrivateKey} = objConfig
 const app = express()
 app.use(express.static(__dirname+'/public'))
 app.use(cookieParser())
+app.use(addLogger)
 app.use(passport.initialize())
 app.engine('hbs', handlebars.engine({
     extname: '.hbs'

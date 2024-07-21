@@ -9,6 +9,7 @@ export class productController {
         this.service = productService
     }
         getAll = async (req,res) => {
+        
         let {page,limit,query,sort} = req.query
         page = page != undefined ? page : 1;
         limit = limit != undefined ? limit : 10;
@@ -35,6 +36,7 @@ export class productController {
                 let product = await this.service.getById(pid)
                 return res.json({status:'success',payload:product})
             } catch (error) {
+                req.logger.error('Error al obtener productos')
                 return res.json({status:'error',payload:error})
             }
 
@@ -66,6 +68,7 @@ export class productController {
             const {id} = req.params
             const del_prod = await this.service.delete(id)
             if(!del_prod){
+                req.logger.error('El producto no fue encontrado')
                 res.json({status:'error',payload:'Product not found'})
             }
             return res.json({status:'success',payload:del_prod})
