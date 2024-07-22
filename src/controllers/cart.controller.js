@@ -10,7 +10,8 @@ export class cartController {
             let carts = await this.cartService.getAll()
             return res.json({status:'success',payload:carts})
         } catch (error) {
-            return res.json({status:'error',payload:error})
+            req.logger.error(`Error getting carts, because: ${error}`)
+            return res.json( {status:'error',payload:'Error finding carts' })
         }
     }
     
@@ -20,7 +21,8 @@ export class cartController {
             let cart = await this.cartService.getById(cid)
             return res.json({status:'success',payload:cart})
         } catch (error) {
-            return res.json({status:'error',payload:error})
+            req.logger.error(`Error getting cart, because: ${error}`)
+            return res.json( {status:'error',payload:'Error finding cart' })
         }
     }
     addProduct = async (req,res) => {
@@ -35,20 +37,22 @@ export class cartController {
             let result = await this.cartService.addProductToCart(cid,pid,quantity)
             return res.json({status:'success',payload:result})
         } catch (error) {
-            return res.json({status:'error',payload:error})
+            req.logger.error(`Error adding cart, because: ${error}`)
+            return res.json( {status:'error',payload:'Error adding cart' })
         }
     }
     update = async (req,res) => {
+        const {cid,pid} = req.params
         try {
             let result = await this.cartService.updateCart(cid,pid)
             return res.json({status:'success',payload:result})
         } catch (error) {
-            return res.json({status:'error',payload:error})
+            req.logger.error(`Cart cannot be updated, because: ${error}`)
+            return res.json( {status:'error',payload:'Error updating cart' })
         }
     }
     deleteProduct = async (req,res) => {
         const {cid,pid} = req.params
-        
         try {
             let cart = await cartService.getCartById(cid)
             if(!cart){
@@ -57,7 +61,8 @@ export class cartController {
             let result = await this.cartService.deleteProductOnCart(cid,pid)
             return res.json({status:'success',payload:result})
         } catch (error) {
-            return res.json({status:'error',payload:error})
+            req.logger.error(`Cart cannot be deleted, because: ${error}`)
+            return res.json( {status:'error',payload:'Error deleting cart' })
         }
     }
     emptyCart = async (req,res) => {
@@ -71,7 +76,8 @@ export class cartController {
             let result = await this.cartService.emptyCart(cid)
             res.json({status:'success',payload:result})
         } catch (error) {
-            res.json({status:'error',payload:error})
+            req.logger.error(`Cart cannot be empty, because: ${error}`)
+            return res.json( {status:'error',payload:'Error empty out the cart' })
         }
     }
     changeCartQuantity = async (req,res) => {// pending
@@ -84,7 +90,8 @@ export class cartController {
             let result = await this.cartService.changeCartQuantity(cid,pid)
             return res.json({status:'success',payload:result})
         } catch (error) {
-            res.json({status:'error',payload:error})
+            req.logger.error(`Cart cannot be updated, because: ${error}`)
+            return res.json( {status:'error',payload:'Error updating quantity of cart' })
         }
     }
 }

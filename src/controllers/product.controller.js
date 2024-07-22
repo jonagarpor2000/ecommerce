@@ -27,6 +27,7 @@ export class productController {
             products.nextLink = `/products?page=${products.nextPage}&limit=${products.limit}`      
             return res.json({status:'success',payload:products})
         } catch (error) {
+            req.logger.error('Error al obtener productos')
             return res.json({status:'error',payload:error})
         }
     }  
@@ -36,7 +37,7 @@ export class productController {
                 let product = await this.service.getById(pid)
                 return res.json({status:'success',payload:product})
             } catch (error) {
-                req.logger.error('Error al obtener productos')
+                req.logger.error(`Product can't be found by id, because: ${error}`)
                 return res.json({status:'error',payload:error})
             }
 
@@ -58,7 +59,8 @@ export class productController {
                         let addedprod = await this.service.add(product)
                         return res.json({status:'success',payload:addedprod})
                 }catch (error) {
-                console.log(error)
+                    req.logger.error(`Product can't be added, because: ${error}`)
+                    return res.json( {status:'error',payload:'Error adding product' })
             }
             
             
@@ -66,12 +68,18 @@ export class productController {
 
         deleteprod = async (req,res) => {
             const {id} = req.params
-            const del_prod = await this.service.delete(id)
-            if(!del_prod){
-                req.logger.error('El producto no fue encontrado')
-                res.json({status:'error',payload:'Product not found'})
+            try {
+                const del_prod = await this.service.delete(id)
+                if(!del_prod){
+                    req.logger.error('product cannot be founded')
+                    res.json({status:'error',payload:'Product not found'})
+                }
+                return res.json({status:'success',payload:del_prod})
+            } catch (error) {
+                req.logger.error(`Product can't be deleted, because: ${error}`)
+                return res.json( {status:'error',payload:'Error deleting product' })
             }
-            return res.json({status:'success',payload:del_prod})
+           
         }
 
         update = async (id,prod)=>{
@@ -82,7 +90,7 @@ export class productController {
             }
                 return res.json({status:'success',payload:updatedProduct}); 
             } catch (err) {
-                console.error(err);
+                req.logger.error(`Product can't be updated, because: ${err}`)
                 return res.json( {status:'error',payload:'Error updating product' })
             }
         }

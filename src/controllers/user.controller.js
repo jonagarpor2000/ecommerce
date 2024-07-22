@@ -9,14 +9,25 @@ class userController {
         this.userService = userService
     }
      getUsers = async(req, res) => {
-        const usersFounded = await this.userService.getUsers()
-        res.json({status:'success', payload: usersFounded})
-        
+        try {
+            
+            const usersFounded = await this.userService.getUsers()
+            res.json({status:'success', payload: usersFounded})
+            
+        } catch (error) {
+            req.logger.error(`Users can't be listed, because: ${error}`)
+            return res.json({status:'error',payload:'Error showing users'})    
+        }
     }
      getUser = async (req, res) => {
         const {uid} = req.params
-        const userFound = await this.userService.getUserBy({_id:uid})
-        res.json({status:'success', payload: userFound})
+        try {
+            const userFound = await this.userService.getUserBy({_id:uid})
+            res.json({status:'success', payload: userFound})
+        } catch (error) {
+            req.logger.error(`User can't be found, because: ${error}`)
+            return res.json({status:'error',payload:'Error finding user'})
+        }
         
     }
 
@@ -36,7 +47,8 @@ class userController {
         const userCreated = await this.userService.createUser(newUser)
         res.send({status:'success', payload: userCreated})
        } catch (error) {
-        console.error(error)
+            req.logger.error(`User can't be created, because: ${error}`)
+            return res.json({status:'error',payload:'Error creating user'})
        }
         
     }
@@ -44,15 +56,25 @@ class userController {
     updateUser = async (req,res) => { //Pending
         const {first_name,last_name,email,age,cart,role,password,} = req.body
         const newUser = {first_name,last_name,email,age,cart,role,password,}
-        const userCreated = await this.userService.createUser(newUser)
-        res.send({status:'success', payload: userCreated})
+        try {
+            const userCreated = await this.userService.createUser(newUser)
+            res.send({status:'success', payload: userCreated})
+        } catch (error) {
+            req.logger.error(`User can't be updated, because: ${error}`)
+            return res.json({status:'error',payload:'Error updating user'})
+        }
     }
     
     deleteUser = async (req,res) => {
         const {uid} = req.body
-        
-        const userDeleted = await this.userService.deleteUser(uid)
-        res.send({status:'success', payload: userDeleted})
+        try {
+            const userDeleted = await this.userService.deleteUser(uid)
+            res.send({status:'success', payload: userDeleted})
+            
+        } catch (error) {
+            req.logger.error(`User can't be deleted, because: ${error}`)
+            return res.json({status:'error',payload:'Error deleting user'})
+        }
     }
 
 
