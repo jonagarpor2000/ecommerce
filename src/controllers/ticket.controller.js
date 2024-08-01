@@ -1,5 +1,7 @@
 
+import { objConfig } from "../config/index.js"
 import { cartService, productService, ticketService } from "../service/index.js"
+import { sendEmail } from "../utils/sendMail.js"
 
 export default class ticketController {
     ticketPost = async (req,res) =>{
@@ -53,6 +55,22 @@ export default class ticketController {
         } catch (error) {
             req.logger.error(`Ticket can't be generated, because: ${error}`)
             return res.json( {status:'error',payload:'Error generating ticket' })
+        }
+    }
+
+    ticketSendMail = async (req,res) =>{
+        try {
+            const user = {
+                first_name: 'test',
+                last_name:'tested',
+                email: req.user
+            }
+            sendEmail({
+                
+            })
+
+        } catch (error) {
+            
         }
     }
 

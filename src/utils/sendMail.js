@@ -14,10 +14,10 @@ export const sendEmail = async ({mail},{order}) => {
     return await transport.sendMail({
         from: `Services Manager<${gmail_usr}>`,
         to: mail,
-        subject: 'Order',
+        subject: `Order ${order.id}`,
         text: 'You bought some products from our ecommerce.<br>There is your bill</br>',
         html: `<div>
-        <h1>This is a test email</h1>
+        <h1>Total amount: ${order.amount}</h1>
         </div>`,
         attachments:[{
             filename: 'logo.png',
