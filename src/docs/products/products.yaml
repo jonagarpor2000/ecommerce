@@ -15,6 +15,26 @@ paths:
                 $ref: '#/components/schemas/products'
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en db
+    post:
+      summary: Create product
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/products'
+      responses:
+        "200":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'
+        "500":
+          description: Internal server error, usualmente generado por una query defectuosa o fallo en db
+
   /api/products/{pid}:
     get:
       summary: Obtiene producto a partir de un id
@@ -36,6 +56,46 @@ paths:
                 $ref: '#/components/schemas/products'
         "500":
           description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en db
+    put:
+      summary: Update product by its own id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del product a actualizar
+          schema:
+           $type: String
+      responses:
+        "200":
+          description: Producto actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en db
+    delete:
+      summary: Delete product by id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id of product to delete
+          schema:
+           $type: String
+      responses:
+        "200":
+          description: Product deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'
+        "500":
+          description: Internal server error
 
 components:
   schemas:
@@ -48,7 +108,7 @@ components:
         title:
           type: string
           description: Nombre del producto
-        descrition:
+        description:
           type: string
           description: Descripción del producto
         price:
@@ -79,4 +139,41 @@ components:
         thumbnail: 'https://example.com/thumbnail1.jpg'
         code: 'P001'
         stock: 100
-      
+
+requestBodies:
+  createproduct:
+    type: object
+    properties:
+        title:
+          type: string
+          description: Nombre del producto
+        descrition:
+          type: string
+          description: Descripción del producto
+        price:
+          type: number
+          description: Precio del producto
+        status:
+          type: boolean
+          description: Estado del producto (activo o inactivo)
+        category:
+          type: string
+          description: Categoría del producto
+        thumbnail:
+          type: string
+          description: URL de la imagen del producto
+        code:
+          type: string
+          description: Código del producto (debe ser único)
+        stock:
+          type: integer
+          description: Stock actual del producto
+    example:
+          title: 'Producto 1'
+          description: 'Descripción del producto 1'
+          price: 19.99
+          status: true
+          category: 'Category 1'
+          thumbnail: 'https://example.com/thumbnail1.jpg'
+          code: 'P001'
+          stock: 100

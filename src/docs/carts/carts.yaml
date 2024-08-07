@@ -1,0 +1,178 @@
+paths:
+  /api/carts:
+    get:
+      summary: Get all carts
+      tags:
+        - carts
+      responses:
+        "200":
+          description: List of all existing carts
+          content:
+            application/json:
+              schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/carts'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en db
+    post:
+      summary: Add product to cart
+      tags:
+        - carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/carts'
+      responses:
+        "200":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "500":
+          description: Internal server error, usualmente generado por una query defectuosa o fallo en db
+
+  /api/carts/{cid}:
+    get:
+      summary: Get cart by its id
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito que se desea solicitar
+          schema:
+           $type: String
+      responses:
+        "200":
+          description: Producto por su id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en db
+    put:
+      summary: Update cart by its own id
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del product a actualizar
+          schema:
+           $type: String
+      responses:
+        "200":
+          description: Producto actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "500":
+          description: Error interno del servidor, usualmente generado por una query defectuosa o fallo en db
+    delete:
+      summary: Empty product by id
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id of cart to empty
+          schema:
+           $type: String
+      responses:
+        "200":
+          description: Cart empty
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "500":
+          description: Internal server error
+
+/api/{cid}/products/{pid}:
+  put:
+    summary: Update cart Quantity
+    tags:
+      - carts
+    parameters:
+      - name: cid
+      - name: pid
+        in: path
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/carts'
+    responses:
+      "200":
+        description: Product created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/carts'
+      "500":
+        description: Internal server error, usualmente generado por una query defectuosa o fallo en db
+  delete:
+    summary: Delete product from a cart
+    tags:
+      - carts
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/carts'
+    responses:
+      "200":
+        description: Product deleted
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/carts'
+      "500":
+        description: Internal server error, usualmente generado por una query defectuosa o fallo en db
+
+
+components:
+  schemas:
+    carts:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID del carrito autogenerado por mongo
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+      example:
+        _id: 610587d204f9c268
+        product: 'sadasfwe325423634'
+        quantity: 6
+
+requestBodies:
+  addProduct:
+    type: object
+    properties:
+        product:
+          type: object
+          description: Product id
+        quantity:
+          type: number
+          description: Quantity of a product
+    example:
+          product: 'adsafdsfdbfdbfgb'
+          quantity: 6
+          
