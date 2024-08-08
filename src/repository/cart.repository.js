@@ -7,9 +7,9 @@ export default class CartRepository {
 
     getAll = async () => await this.dao.getAll()
     getById = async id => await this.dao.getById(id)
-    addproduct = async (pid) =>{ 
-        const newproduct = new cartDto(pid)
-        await this.dao.addproduct(newproduct)
+    addProduct = async (allcart) =>{ 
+        const newproduct = new cartDto(allcart)
+        await this.dao.addProduct(newproduct.cid,newproduct.pid,newproduct.quantity)
         
     }
 

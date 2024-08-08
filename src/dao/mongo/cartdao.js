@@ -28,7 +28,7 @@ export default class cartMgMongo {
 
     create = async () => await this.model.create({products: []})
 
-    addProductToCart = async (cid, pid,quantity) => {
+    addProduct = async (cid, pid,quantity) => {
             return await this.model.findByIdAndUpdate({_id:cid},
                 {$push:
                     {products:{product: pid,quantity}}

@@ -29,12 +29,12 @@ export class cartController {
         const {body} = req
         const {cid,pid,quantity} = body
         try {
-            let cart = await cartService.getCartById(cid)
+            let cart = await cartService.getById(cid)
             if(!cart?.products||!cid){
                 
                 cid = (await cartService.createCart()._id)
             }
-            let result = await this.cartService.addProductToCart(cid,pid,quantity)
+            let result = await this.cartService.addProduct({cid,pid,quantity})
             return res.json({status:'success',payload:result})
         } catch (error) {
             req.logger.error(`Error adding cart, because: ${error}`)
@@ -54,7 +54,7 @@ export class cartController {
     deleteProduct = async (req,res) => {
         const {cid,pid} = req.params
         try {
-            let cart = await cartService.getCartById(cid)
+            let cart = await cartService.getById(cid)
             if(!cart){
                return res.json({status:'error',payload:`The cart doesn't exists`})
             }
@@ -68,7 +68,7 @@ export class cartController {
     emptyCart = async (req,res) => {
         const {cid} = req.params
         try {
-            let cart = await cartService.getCartById(cid)
+            let cart = await cartService.getById(cid)
             if(!cart){
                 return res.json({status:'error',payload:`The cart doesn't exists`})
              }
@@ -83,7 +83,7 @@ export class cartController {
     changeCartQuantity = async (req,res) => {// pending
         const {cid,pid} = req.params
         try {
-            let cart = await cartService.getCartById(cid)
+            let cart = await cartService.getById(cid)
             if(!cart){
                return res.json({status:'error',payload:`The cart doesn't exists`})
             }

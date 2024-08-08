@@ -20,6 +20,7 @@ paths:
       tags:
         - carts
       requestBody:
+        $ref: '#/components/requestBodies/addProduct'
         required: true
         content:
           application/json:
@@ -144,35 +145,48 @@ paths:
 
 
 components:
+  requestBodies:
+    addProduct:
+      parameters:
+        - name: cid
+          in: body
+          required: true
+          description: id del carrito que se desea solicitar
+      type: object
+      properties:
+          cid:
+            type: string
+            description: Cart id
+          pid:
+            type: string
+            description: Product id
+          quantity:
+            type: number
+            description: Quantity of a product
+      example:
+            cid: 'adsafdsfdbfdbfgb'
+            pid: 'adsafdsfdbfdbfgb'
+            quantity: 6
+
   schemas:
     carts:
       type: object
       properties:
-        _id:
-          type: ObjectId
-          description: ID del carrito autogenerado por mongo
-        title:
-          type: string
-          description: Nombre del producto
-        description:
-          type: string
-          description: Descripción del producto
+        products:
+          type: array
+          description: Array with product's id and quantity on it
+          items:
+            type: object
+            properties:
+              product:
+                type: object
+                description: Product id to buy
+              quantity:
+                type: number
+                description: Quantity of products to buy
       example:
         _id: 610587d204f9c268
         product: 'sadasfwe325423634'
         quantity: 6
 
-requestBodies:
-  addProduct:
-    type: object
-    properties:
-        product:
-          type: object
-          description: Product id
-        quantity:
-          type: number
-          description: Quantity of a product
-    example:
-          product: 'adsafdsfdbfdbfgb'
-          quantity: 6
           
