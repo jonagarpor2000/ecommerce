@@ -19,7 +19,7 @@ const swaggerOptions = {
     definition: {
         openapi: '3.0.1',
         info: {
-            title: 'Documentacion de app ecomerce',
+            title: 'Documentacion de app ecommerce',
             version: '1.0.0',
             description: 'Ecommerce solicitado en coderhouse'
         }
@@ -27,7 +27,7 @@ const swaggerOptions = {
     apis: [`${__dirname}/docs/**/*.yaml`]
 }
 
-app.use(express.static(__dirname+'/public'))
+app.use('/virtual',express.static(__dirname+'/public'))
 app.use(cookieParser())
 app.use(addLogger)
 app.use(passport.initialize())
@@ -36,14 +36,11 @@ app.engine('hbs', handlebars.engine({
 }))
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: mongoUrl,
-    mongoOptions:{
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    },        
-    ttl:60*60*1000*24
+        mongoUrl: mongoUrl,        
+    ttl:60*60*24
     }),
     secret: jwtPrivateKey,
+    user: 'ramdom@gmail.com',
     resave: true,
     saveUninitialized: true,
     

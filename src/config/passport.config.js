@@ -40,8 +40,7 @@ export const initializePassport = () =>{
         callbackURL:'http://localhost:8080/api/sessions/githubcallback'
     },async (accessToken,refreshToken,profile,done)=>{
         try {
-            let user = await usrService.getUserBy({email: profile._json.email})
-            console.log(user)
+            let user = await usrService.getBy({email: profile._json.email})
             if(!user){
                 let newUser = {
                     first_name:profile._json.name.split(' ')[0],

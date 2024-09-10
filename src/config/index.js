@@ -21,7 +21,10 @@ export const objConfig = {
     mongoUrl: process.env.MONGO_URL,
     jwtPrivateKey: process.env.JWT_PRIVATE_KEY,
     persistence:process.env.PERSISTENCE,
+    mail_usr:process.env.MAIL_USER,
+    mail_pass:process.env.MAIL_PASS,
     mode: mode
+    
 }
     
 export const connectDB = () => {

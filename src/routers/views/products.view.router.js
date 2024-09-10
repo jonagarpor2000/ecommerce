@@ -1,4 +1,6 @@
 import {Router, query} from 'express'
+import { logger } from '../../utils/logger.js';
+
 
 
 const router = Router()
@@ -13,7 +15,6 @@ router.get('/',async(req,res)=>{
         let prods = await fetch(`http://127.0.0.1:8080/api/products?page=${page}&limit=${limit}`) // Esto retorna HTML/ Tal vel usar header
         .then(response => response.json())
         .then(data => {return data})
-        console.log(prods)
         res.render('products',{
             products: prods.payload
         })
@@ -21,6 +22,22 @@ router.get('/',async(req,res)=>{
         
     } catch (error) {
         console.log(error.message)
+    }
+    
+})
+
+router.get('/:pid',async(req,res)=>{
+    let {pid} = req.params
+    try {
+    let prod = await fetch(`http://127.0.0.1:8080/api/products/${pid}`)
+        .then(response => response.json())
+        .then(data => {return data})
+    res.render('product',{product: prod.payload})
+
+        
+    } catch (error) {
+        logger.error(error.message)
+        res.render('product',{error: 'falla en la carga del producto'})
     }
     
 })

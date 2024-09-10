@@ -1,0 +1,19 @@
+<a href="/api/sessions/logout" class="btn btn-outline-danger">Logout</a>
+<h1>Product detail</h1>
+<center>
+<div data-name="container" id="dvd">
+<h2>{{product.title}}</h2>
+<p> description: {{product.description}}</p>
+<p> price: {{product.price}}</p>
+<p> category: {{product.category}}</p>
+<p> Thumbnail: {{product.thumbnail}}</p>
+<p> Codigo de producto: {{product.code}}</p>
+<p> Stock: {{product.stock}}</p>
+<label for="prod_quantity">Quantity:</label>
+<input type="number" min="1" name="prod_quantity">
+<button data-name="buy" id="buy_product">Add to cart</button>
+</div>
+
+<script src="/virtual/js/products.js"></script>
+</center>
+

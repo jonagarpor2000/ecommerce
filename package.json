@@ -6,7 +6,8 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js --mode production",
-    "dev": "node --watch src/app.js --mode development"
+    "dev": "node --watch src/app.js --mode development",
+    "test": "mocha test/products.test.js"
   },
   "keywords": [],
   "author": "Jonathan Garcia",
@@ -34,5 +35,10 @@
     "swagger-ui-express": "^5.0.1",
     "twilio": "^5.2.2",
     "winston": "^3.13.1"
+  },
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "supertest": "^7.0.0"
   }
 }

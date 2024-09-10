@@ -1,4 +1,4 @@
-export const generateUserError = (user) => {
+const generateUserError = (user) => {
     return `Hay una de las propiedades del usuario incompleta o no valida.
     listado de propiedades requeridos
     *first_name: necesita ser un string, pero se recibio ${user.first_name}
@@ -7,7 +7,7 @@ export const generateUserError = (user) => {
     *first_name: necesita ser un string, pero se recibio ${user.first_name}
     `
 }
-export const generateProductError = (product) => {
+const generateProductError = (product) => {
     return `Hay una de las propiedades del usuario incompleta o no valida.
     listado de propiedades requeridos
     *title: necesita ser un string, pero se recibio ${product.title}
@@ -20,3 +20,8 @@ export const generateProductError = (product) => {
     *stock: necesita ser un string, pero se recibio ${product.stock}
     `
 }
+
+const duplicateUserindbError = (user) => {
+    return `User ${user} was created previously`
+}
+export {generateProductError, generateUserError,duplicateUserindbError}

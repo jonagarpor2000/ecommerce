@@ -2,16 +2,9 @@
 <h1>Welcome to Product List</h1>
 <div data-name="container" id="dvd">
 {{#each products.docs}}
-<p hidden="true" data-name="pid"> {{_id}}</p>
-<p> Titulo: {{title}}</p>
+<p> Titulo: <a = href="/products/{{_id}}">{{title}}</a></p>
 <p> Descripcion: {{description}}</p>
 <p> Precio: {{price}}</p>
-<p> Estado: {{status}}</p>
-<p> Categoria: {{category}}</p>
-<p> Thumbnail: {{thumbnail}}</p>
-<p> Codigo de producto: {{code}}</p>
-<p> Stock: {{stock}}</p>
-<button data-name="save" id="save_cart">Agregar al carrito</button>
 <hr></hr>
 {{/each}}
 
@@ -23,7 +16,7 @@
     <a href="{{products.nextLink}}">Siguiente</a>
 {{/if}}
 <script>
-       const btnAddToCart = document.querySelector("#save_cart")
+ /**      const btnAddToCart = document.querySelector("#save_cart")
    const divcontainer = document.querySelector("#dvd")
 btnAddToCart.addEventListener('click', async function(event){
     event.preventDefault()
@@ -50,7 +43,7 @@ btnAddToCart.addEventListener('click', async function(event){
         console.error('Error adding to cart:', error);
       }
     
-})
+})*/
     
 </script>
 </div>

@@ -1,7 +1,6 @@
 
 import { objConfig } from "../config/index.js"
 import { cartService, productService, ticketService } from "../service/index.js"
-import { sendEmail } from "../utils/sendMail.js"
 
 export default class ticketController {
     ticketPost = async (req,res) =>{
@@ -65,9 +64,7 @@ export default class ticketController {
                 last_name:'tested',
                 email: req.user
             }
-            sendEmail({
-                
-            })
+            
 
         } catch (error) {
             

@@ -14,7 +14,6 @@ export default class UserMgMongo {
   
     async getBy(filter) {
       let usr = await this.userModel.findOne(filter)
-      console.log(`tengo ${filter} con ${usr}`)
       return usr ;
     }
   
