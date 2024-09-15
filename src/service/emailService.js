@@ -14,7 +14,10 @@ const transport = nodemailer.createTransport({
 export default class emailService {
 
     sendEmail = async (mailOptions) =>{ 
-        log.info(`Mail sent to: ${mailOptions.address}
+        mailOptions.from = `Ecommerce managment <${mail_usr}>`
+        log.info(`
+            Mail sent  from: ${mailOptions.from})
+            Mail sent to: ${mailOptions.to}
             Subject: ${mailOptions.subject}
             HTML: ${mailOptions.html}
             Attachments: ${mailOptions.attachments}`)

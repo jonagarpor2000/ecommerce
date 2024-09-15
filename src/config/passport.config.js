@@ -3,7 +3,7 @@ import githubStrategy from 'passport-github2'
 import {Strategy,ExtractJwt} from 'passport-jwt'
 import { PRIVATE_KEY } from '../utils/jwt.js'
 import { passportCall } from '../middlewares/passportCall.middleware.js'
-import { userService} from '../service/index.js'
+import { cartService, userService} from '../service/index.js'
 
 
 
@@ -49,7 +49,9 @@ export const initializePassport = () =>{
                     password:'',
                     role:'user'
                 }
-                let result = await usrService.createUser(newUser)
+                let newCart = await cartService.createEmpty()
+                newUser.cartID = newCart._id
+                let result = await usrService.create(newUser)
                 done(null,result)
             }else{
                 done(null,user)
@@ -64,7 +66,7 @@ export const initializePassport = () =>{
     })
     passport.deserializeUser(async(id, done)=>{
         try {
-            const user = await usrService.getUserBy({_id:id})
+            const user = await usrService.getById(id)
             done(null,user)
         } catch (error) {
             done(error)

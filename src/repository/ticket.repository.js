@@ -6,7 +6,7 @@ export default class TicketRepository {
     }
     createTicket = async (ticketargs) =>{ 
         const newTicket = new TicketDto(ticketargs)
-        await this.dao.createTicket(newTicket)
+        return await this.dao.createTicket(newTicket)
     
     }
         

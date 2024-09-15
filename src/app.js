@@ -1,14 +1,12 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
 import __dirname from './utils.js';
-import session from 'express-session'
 import indexRouter from './routers/index.js'
-import MongoStore from 'connect-mongo'
 import {connectDB, objConfig} from './config/index.js' 
 import { initializePassport } from './config/passport.config.js'
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
-import { addLogger } from './utils/logger.js';
+import { addLogger, logger } from './utils/logger.js';
 import swaggerJsDocs  from 'swagger-jsdoc'
 import swaggerUiExpress from 'swagger-ui-express'
 
@@ -34,22 +32,12 @@ app.use(passport.initialize())
 app.engine('hbs', handlebars.engine({
     extname: '.hbs'
 }))
-app.use(session({
-    store: MongoStore.create({
-        mongoUrl: mongoUrl,        
-    ttl:60*60*24
-    }),
-    secret: jwtPrivateKey,
-    resave: true,
-    saveUninitialized: true,
-    
-}))
+
 
 
 
 initializePassport()
 app.use(passport.initialize())
-app.use(passport.session())
 
 app.set('views',__dirname+'/views')
 app.set('view engine','hbs')
@@ -62,7 +50,7 @@ app.use(indexRouter)
 connectDB()
 
 app.listen(port,'127.0.0.1', error => {
-    if(error) console.log(`Error: ${error}`)
-    console.log(`Server escuchando en el puerto ${port}`)
+    if(error) logger.info(`Error: ${error}`)
+    logger.info(`Server escuchando en el puerto ${port}`)
 
 })

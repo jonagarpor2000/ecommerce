@@ -1,9 +1,14 @@
+<a href='/products/' class="btn btn-light" id="prod_list">Back to products</a>
+{{#if cart includeZero=true}}
 <a href="/api/sessions/logout" class="btn btn-outline-danger">Logout</a>
+<a href='/carts/{{cart}}' class="btn btn-info" id="userCart">Go to cart</a>
+{{/if}}
+
 <h1>Product detail</h1>
 <center>
 <div data-name="container" id="prod-form">
 <img id="productImage" src="{{product.thumbnail}}" alt="{{product.title}}">
-<p id="userCart" hidden="true">{{cart}}</p>
+
 <h2 id="prod-title">{{product.title}}</h2>
 <p> description: {{product.description}}</p>
 <p> price: {{product.price}}</p>

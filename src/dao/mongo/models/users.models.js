@@ -37,6 +37,7 @@ const userSchema = new Schema({
         enum:['user','admin','premium'],
         default: 'user'
     },
+    lastActive:Date,
     documents: 
       { type:[{
 

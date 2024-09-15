@@ -1,19 +1,26 @@
+<a href='/products/' class="btn btn-light" id="prod_list">Back to products</a>
 <a href="/api/sessions/logout" class="btn btn-outline-danger">Logout</a>
 <h1>Welcome to your Cart</h1>
 <div>
 {{#each cart}}
-    {{#each product}}
-        <div>
-        <img id="productImage" src="{{this.thumbnail}}" alt="{{this.title}}">
-        <p> Product:<h2> {{this.title}}</h2></p>
-        <p> Precio: <data id="price_prod">{{this.price}}</data></p>
-        </div>
-    {{/each}}
-    <center>
-    <h5>Quantity</h5><data id="quantity_prod">{{this.quantity}}</data>
-    </center>
-<hr/>
+    {{#if product includeZero=true}}
+        {{#each product}}
+            <div>
+            <img id="productImage" src="{{this.thumbnail}}" alt="{{this.title}}">
+            <a href="/prducts/{{this._id}}"> Product:<h2> {{this.title}}</h2></a>
+            <p> Precio: <data id="price_prod">{{this.price}}</data></p>
+            </div>
+        {{/each}}
+        <center>
+        <h5>Quantity</h5><data id="quantity_prod">{{this.quantity}}</data>
+        </center>
+        <hr/>
+            
+    {{else}}
+        <p>Your cart is empty.</p>
+    {{/if}}
 {{/each}}
+</div>
 <form id="buy">
 <button data-name="buy_btn" id="buy_btn">Buy</button>
 </form>

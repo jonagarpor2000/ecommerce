@@ -6,7 +6,6 @@ import { authorization } from '../../middlewares/authorization.middleware.js'
 const router = Router()
 
 router.get('/', await authentication,await authorization('admin'),async(req,res)=>{
-    const {cid} = req.params
     let result = await fetch(`http://127.0.0.1:8080/api/carts`)
         .then(response => response.json())
         .then(data => {return data})

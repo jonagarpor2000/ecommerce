@@ -15,6 +15,7 @@ export class AllUserDto extends UserDto{
     constructor(user){
         super(user)  
         this.password = user.password
+        this.lastAccess = user.lastAccess
     }
 
 }

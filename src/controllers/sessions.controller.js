@@ -7,6 +7,7 @@ import { userController } from './user.controller.js'
 import { CustomError } from '../utils/errors/error.js'
 import { generateUserError } from '../utils/errors/info.js'
 import { EError } from '../utils/errors/enums.js'
+import { mailController } from './mail.controller.js'
 
 
 
@@ -57,7 +58,12 @@ generictoken = (mail, _id, role, fullname) => {
         let {_id,role,fullname} = result.payload
         
         this.generictoken(email,_id,role,fullname)
-        req.session.user = email
+        await userService.updateLastAccess(email)
+        let data = {
+            address: email,
+            user:{fullname}
+        }
+        await new mailController().userRegistration(data)
         res.cookie('token', this.token, {httpOnly: true, maxAge: 60*60*24}).redirect('/products')
         }catch(e){
             logger.error(`User can't be created in session, because: ${e}`)
@@ -70,12 +76,13 @@ generictoken = (mail, _id, role, fullname) => {
         const {email, password} = req.body
         const userFound = await userService.getBy({email})
         if(!password || !email) return res.status(401).send({status: 'error', error: 'empty credentials'})
+        if(!userFound) return res.status(401).send({status: 'error', error: 'your user does not exist'})
         if(!isValidPassword(password,{password: userFound.password})) return res.status(401).send({status: 'error', error: 'login failed'})
     
         
         const{_id,role,fullname} = userFound
         this.generictoken(email,_id,role,fullname)
-        req.session.user = email
+        await userService.updateLastAccess(email)
         res.cookie('token', this.token, {httpOnly: true, maxAge: 60*60*24}).redirect('/products')
     }
 
@@ -84,13 +91,12 @@ generictoken = (mail, _id, role, fullname) => {
         const {email,_id,role,first_name,last_name} = req.user
         let fullname = `${first_name} ${last_name}`    
         this.generictoken(email,_id,role,fullname)
-        req.session.user = email
+        await userService.updateLastAccess(email)
         return res.cookie('token', this.token, {httpOnly: true, maxAge: 60*60*24}).redirect('/products')
     }
 
 
     logout = async (req, res) => {
-        
         res.clearCookie('token').redirect('/login')
 
     }
