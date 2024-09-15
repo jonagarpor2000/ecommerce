@@ -1,0 +1,21 @@
+<a href="/api/sessions/logout" class="btn btn-outline-danger">Logout</a>
+<h1>Welcome to your Cart</h1>
+<div>
+{{#each cart}}
+    {{#each product}}
+        <div>
+        <img id="productImage" src="{{this.thumbnail}}" alt="{{this.title}}">
+        <p> Product:<h2> {{this.title}}</h2></p>
+        <p> Precio: <data id="price_prod">{{this.price}}</data></p>
+        </div>
+    {{/each}}
+    <center>
+    <h5>Quantity</h5><data id="quantity_prod">{{this.quantity}}</data>
+    </center>
+<hr/>
+{{/each}}
+<form id="buy">
+<button data-name="buy_btn" id="buy_btn">Buy</button>
+</form>
+</div>
+<script src="/virtual/js/cart.js"></script>

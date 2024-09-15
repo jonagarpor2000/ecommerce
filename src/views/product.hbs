@@ -1,19 +1,23 @@
 <a href="/api/sessions/logout" class="btn btn-outline-danger">Logout</a>
 <h1>Product detail</h1>
 <center>
-<div data-name="container" id="dvd">
-<h2>{{product.title}}</h2>
+<div data-name="container" id="prod-form">
+<img id="productImage" src="{{product.thumbnail}}" alt="{{product.title}}">
+<p id="userCart" hidden="true">{{cart}}</p>
+<h2 id="prod-title">{{product.title}}</h2>
 <p> description: {{product.description}}</p>
 <p> price: {{product.price}}</p>
 <p> category: {{product.category}}</p>
-<p> Thumbnail: {{product.thumbnail}}</p>
 <p> Codigo de producto: {{product.code}}</p>
 <p> Stock: {{product.stock}}</p>
+<form id="addToCart">
 <label for="prod_quantity">Quantity:</label>
-<input type="number" min="1" name="prod_quantity">
+<input type="number" required="true" min="1" id="p_quantity" name="prod_quantity">
 <button data-name="buy" id="buy_product">Add to cart</button>
+</form>
 </div>
 
-<script src="/virtual/js/products.js"></script>
+
+<script src="/virtual/js/products.js">const cart = <%- JSON.stringify(cart) %>;</script>
 </center>
 

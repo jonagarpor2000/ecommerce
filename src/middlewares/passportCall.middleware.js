@@ -7,7 +7,7 @@ export const passportCall = strategy => {
         passport.authenticate(strategy, function (err, user, info) {
             logger.info(`passportcalled user ${user} with ${strategy}`)
             if(err) return next(err)
-            if(!user) return res.status(401).send({error: info.message? info.messages : info.toString()})
+            if(!user) return res.status(401).send({status:"Error",payload: 'You are not allowed to access this endpoint without logged in'})
             req.user = user
             next()
         })(req,res,next)

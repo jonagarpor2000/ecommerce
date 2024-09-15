@@ -1,3 +1,4 @@
+import { logger } from "../../utils/logger.js";
 import { cartModel } from "./models/carts.models.js";
 export default class cartMgMongo {
     constructor() {
@@ -35,15 +36,16 @@ export default class cartMgMongo {
                 },{ new: true })
     }
 
-    deleteProductOnCart = async (cid, pid) => {
+    deleteProductOnCart = async (cid, pids) => {
             return await this.model.findOneAndUpdate(
                 { _id: cid },
-                { $pull: { products: { _id: pid  } } },
+                { $pull: { products: {product:{ $in: pids }} } },
                 { new: true }
               );
     }
     empty = async (cid) => {
-            return await this.model.findOneAndUpdate(
+            logger.info(`cid: ${cid}`)
+            return await this.model.updateOne(
               { _id: cid },
               { $set: { products:[]} },
               { new: true }

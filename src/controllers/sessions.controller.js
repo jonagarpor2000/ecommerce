@@ -21,25 +21,26 @@ export class authController {
 /**
  * Generates a JWT token with user information.
  *
- * @param {string} email - The user's email.
+ * @param {string} mail - The user's email.
  * @param {string} _id - The user's unique identifier.
  * @param {string} role - The user's role.
  * @param {string} fullname - The user's full name.
  *
  * @returns {string} A JWT token containing the user's information.
  */
-generictoken = (email, _id, role, fullname) => {
+generictoken = (mail, _id, role, fullname) => {
     this.token = generateToken({
-        email,
+        email: mail,
         _id,
         role,
         fullname
     });
+
 }
     registerUser = async (req, res) => {
-        const {first_name, last_name, email,password} = req.body
-        logger.info(`From body of session ${first_name} ${last_name} ${email} ${password}`)
+        const {first_name, last_name,email,password} = req.body
         try{
+        logger.info(`From body of session ${first_name} ${last_name} ${email} ${password}`)
         if(!first_name||!last_name||!email ||!password) return res.json({status: 'error', error: 'se deben completar campos pendientes'})
 
         let result = await this.userController.createUser(req,res)
@@ -53,11 +54,11 @@ generictoken = (email, _id, role, fullname) => {
                
             })   
            }
-        const {_id,role,email,fullname} = result.payload
+        let {_id,role,fullname} = result.payload
         
-        this.generictoken(_id,role,email,fullname)
-
-        res.cookie('token', this.token, {httpOnly: true, maxAge: 60*60*24}).json({status: 'success', message:' usuario registrado'})
+        this.generictoken(email,_id,role,fullname)
+        req.session.user = email
+        res.cookie('token', this.token, {httpOnly: true, maxAge: 60*60*24}).redirect('/products')
         }catch(e){
             logger.error(`User can't be created in session, because: ${e}`)
             res.json({status: 'error', error: 'error al registrar usuario'})
@@ -73,7 +74,8 @@ generictoken = (email, _id, role, fullname) => {
     
         
         const{_id,role,fullname} = userFound
-        this.generictoken(_id,role,email,fullname)
+        this.generictoken(email,_id,role,fullname)
+        req.session.user = email
         res.cookie('token', this.token, {httpOnly: true, maxAge: 60*60*24}).redirect('/products')
     }
 
@@ -81,7 +83,8 @@ generictoken = (email, _id, role, fullname) => {
     logingithubUser = async(req,res)=>{
         const {email,_id,role,first_name,last_name} = req.user
         let fullname = `${first_name} ${last_name}`    
-        this.generictoken(_id,role,email,fullname)
+        this.generictoken(email,_id,role,fullname)
+        req.session.user = email
         return res.cookie('token', this.token, {httpOnly: true, maxAge: 60*60*24}).redirect('/products')
     }
 

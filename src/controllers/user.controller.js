@@ -13,8 +13,10 @@ class userController {
     }
      getUsers = async(req, res) => {
         try {
-            
-            const usersFounded = await this.userService.getUsers()
+            let {page,limit} = req.query
+            page = page != undefined ? page : 1;
+            limit = limit != undefined ? limit : 10;
+            const usersFounded = await this.userService.getAll(limit,page)
             res.json({status:'success', payload: usersFounded})
             
         } catch (error) {
@@ -25,7 +27,7 @@ class userController {
      getUser = async (req, res) => {
         const {uid} = req.params
         try {
-            const userFound = await this.userService.getUserBy({_id:uid})
+            const userFound = await this.userService.getBy({_id:uid})
             res.json({status:'success', payload: userFound})
         } catch (error) {
             req.logger.error(`User can't be found, because: ${error}`)
@@ -46,8 +48,8 @@ class userController {
     }
 
     createUser = async (req,res) => {
-        const {first_name,last_name,email,birthDate,role,password} = req.body
-       try {
+        const {first_name, last_name, email,password} = req.body  
+        try {
         logger.info(`Loading user ${first_name} ${last_name} ${email} ${password} from DAO`)
         if(!first_name || !last_name || !email|| !password){
          CustomError.createError({
@@ -70,7 +72,7 @@ class userController {
         }
         const newCart = await this.cartService.createEmpty()
         logger.info(`User's cart: ${newCart}`)
-        const newUser = {first_name,last_name,email,cartID:newCart._id,birthDate,role,password: await createHash(password)}
+        const newUser = {first_name,last_name,email,cartID:newCart._id,password: await createHash(password)}
         let userCreated = await this.userService.create(newUser)
         logger.warning(`User created at DAO: ${userCreated}`)
         return {status:'success', payload: userCreated}
@@ -106,6 +108,17 @@ class userController {
         const {uid} = req.body
         try {
             const userDeleted = await this.userService.deleteUser(uid)
+            res.send({status:'success', payload: userDeleted})
+            
+        } catch (error) {
+            req.logger.error(`User can't be deleted, because: ${error}`)
+            return res.json({status:'error',payload:'Error deleting user'})
+        }
+    }
+
+    deleteinactiveusers = async (req,res) => {
+        try {
+            const userDeleted = await this.userService.deleteinactive()
             res.send({status:'success', payload: userDeleted})
             
         } catch (error) {

@@ -4,8 +4,8 @@ export default class UserMgMongo {
       this.userModel = userModel;
     }
 
-    async getAll({limit = 10, numPage=1}) {
-        return await this.userModel.paginate({}, {limit, page: numPage, sort: {price: -1}, lean: true })
+    async getAll(limit, page) {
+        return await this.userModel.paginate({}, {limit, page, lean: true })
     }
   
     async create(newUser) {
@@ -13,12 +13,15 @@ export default class UserMgMongo {
     }
   
     async getBy(filter) {
-      let usr = await this.userModel.findOne(filter)
-      return usr ;
+      return await this.userModel.findOne(filter);
     }
   
     async delete(id_usr) {
       return await this.userModel.deleteOne({_id:id_usr})
+    }    
+    
+    async deleteinactive() {
+      return await this.userModel.deleteMany({_id:id_usr})
     }
     
   

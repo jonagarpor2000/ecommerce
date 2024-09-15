@@ -1,7 +1,7 @@
 import passport from 'passport'
 import githubStrategy from 'passport-github2'
 import {Strategy,ExtractJwt} from 'passport-jwt'
-import { PRIVATE_KEY, generateToken } from '../utils/jwt.js'
+import { PRIVATE_KEY } from '../utils/jwt.js'
 import { passportCall } from '../middlewares/passportCall.middleware.js'
 import { userService} from '../service/index.js'
 

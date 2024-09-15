@@ -40,7 +40,6 @@ app.use(session({
     ttl:60*60*24
     }),
     secret: jwtPrivateKey,
-    user: 'ramdom@gmail.com',
     resave: true,
     saveUninitialized: true,
     

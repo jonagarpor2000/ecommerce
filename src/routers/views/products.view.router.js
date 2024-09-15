@@ -1,5 +1,7 @@
 import {Router, query} from 'express'
 import { logger } from '../../utils/logger.js';
+import { objConfig } from '../../config/index.js';
+import { extractfields } from '../../utils/jwt.js';
 
 
 
@@ -28,11 +30,26 @@ router.get('/',async(req,res)=>{
 
 router.get('/:pid',async(req,res)=>{
     let {pid} = req.params
+
+    
     try {
+    let cart = null
+    if(req.cookies.token){
+        const data = extractfields(req.cookies.token)
+        let uid = data.user._id
+        console.log(uid)
+        let cid = await fetch(`http://127.0.0.1:8080/api/users/${uid}`)
+        .then(response => response.json())
+        .then(data => {return data})
+        cart = cid.payload.cartID
+        req.logger.info(`Cart Id at product view: ${cart}`)
+        
+    }
+    
     let prod = await fetch(`http://127.0.0.1:8080/api/products/${pid}`)
         .then(response => response.json())
         .then(data => {return data})
-    res.render('product',{product: prod.payload})
+    res.render('product',{cart,product: prod.payload})
 
         
     } catch (error) {

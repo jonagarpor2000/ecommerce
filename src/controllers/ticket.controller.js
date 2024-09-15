@@ -40,7 +40,9 @@ export default class ticketController {
             })
     
             if(productNotPurchased.length> 0){
-                await cartService.deleteProductOnCart(cid,cart.products.filter(item=>!productNotPurchased.includes(cart._id,item.product._id)))
+                let prodstoBuy = cart.products.filter(item=>!productNotPurchased.includes(cart._id,item.product._id)).map(item => item.product[0]._id.toString())
+                await cartService.deleteProductOnCart((cid,prodstoBuy))
+                
             }else{
                 await cartService.empty(cid)
             }
@@ -52,7 +54,8 @@ export default class ticketController {
                 ticket
             })
         } catch (error) {
-            req.logger.error(`Ticket can't be generated, because: ${error}`)
+            //req.logger.error(`Ticket can't be generated, because: ${error}`)
+            console.log(error)
             return res.json( {status:'error',payload:'Error generating ticket' })
         }
     }

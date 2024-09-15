@@ -1,4 +1,5 @@
 import { cartService } from "../service/index.js";
+import { logger } from "../utils/logger.js";
 
 export class cartController {
     constructor(){
@@ -33,7 +34,12 @@ export class cartController {
             if(!cart?.products||!cid){
                 
                 cid = (await cartService.createCart()._id)
+            } if(hasProductExistent(cart,pid)){
+                return res.json({status:'error',payload:`The product ${pid} already exists in the cart`})
             }
+            logger.info(`Cart getted successfully ${cart}`)
+            console.log("Cart: ",)
+
             let result = await this.cartService.addProduct({cid,pid,quantity})
             return res.json({status:'success',payload:result})
         } catch (error) {
@@ -73,7 +79,7 @@ export class cartController {
                 return res.json({status:'error',payload:`The cart doesn't exists`})
              }
 
-            let result = await this.cartService.emptyCart(cid)
+            let result = await this.cartService.empty(cid)
             res.json({status:'success',payload:result})
         } catch (error) {
             req.logger.error(`Cart cannot be empty, because: ${error}`)
@@ -94,4 +100,17 @@ export class cartController {
             return res.json( {status:'error',payload:'Error updating quantity of cart' })
         }
     }
+
+    
 }
+function hasProductExistent(cart,pid) {
+  
+    for (const item of cart.products) {
+      const productId = item.product[0]._id.toString(); 
+      if (pid===productId) {
+        return true
+      }
+    }
+  
+    return false; // No duplicates found
+  }
