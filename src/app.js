@@ -49,7 +49,7 @@ app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 app.use(indexRouter)
 connectDB()
 
-app.listen(port,'127.0.0.1', error => {
+app.listen(port,'0.0.0.0', error => {
     if(error) logger.info(`Error: ${error}`)
     logger.info(`Server escuchando en el puerto ${port}`)
 
